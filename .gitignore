@@ -1,0 +1,43 @@
+# Node.js
+node_modules/
+.npm
+package-lock.json
+
+# Hardhat
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# Next.js / React (for your astraea-frontend folder)
+.next/
+out/
+build/
+.swc/
+*.log
+
+# Python / AI Backend (for Person B's code)
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Environment Variables (CRITICAL)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS / Editor Files
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
