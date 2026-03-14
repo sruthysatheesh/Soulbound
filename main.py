@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from agents.fingerprinter import fingerprint
 
 load_dotenv()
 
@@ -42,3 +43,17 @@ async def scan(input: RepoInput):
     
     print("✅ Done!")
     return report
+
+class FingerprintInput(BaseModel):
+    github_username: str
+    patch_repo_url: str
+
+@app.post("/verify")
+async def verify(input: FingerprintInput):
+    print("🔍 Starting fingerprint verification...")
+    result = fingerprint(
+        input.github_username,
+        input.patch_repo_url
+    )
+    print("✅ Verification complete!")
+    return result
