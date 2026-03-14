@@ -44,3 +44,5 @@ __pycache__/
 
 # Security
 *.pem
+*.vscode
+.vscode_hardhat_config_*.ts
