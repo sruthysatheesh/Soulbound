@@ -1,0 +1,15 @@
+# API Keys - NEVER push
+.env
+
+# Cloned repos - too large
+temp/
+
+# Python cache - auto generated
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
+
+# Ngrok executable
+ngrok.exe

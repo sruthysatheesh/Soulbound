@@ -14,28 +14,11 @@ interface ScanResult {
   ipfs_uri: string;
 }
 
-const PLACEHOLDER_CODE = `// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-
-contract VulnerableBank {
-    mapping(address => uint256) public balances;
-
-    function deposit() public payable {
-        balances[msg.sender] += msg.value;
-    }
-
-    function withdraw(uint256 amount) public {
-        require(balances[msg.sender] >= amount);
-        // BUG: External call before state update!
-        (bool success,) = msg.sender.call{value: amount}("");
-        require(success);
-        balances[msg.sender] -= amount;
-    }
-}`;
+const PLACEHOLDER_REPO = `https://github.com/Uniswap/v2-core`;
 
 export default function ScannerPage() {
   const { address: connectedAddress, isConnected } = useAccount();
-  const [code, setCode] = useState('');
+  const [repoUrl, setRepoUrl] = useState('');
   const [hackerAddress, setHackerAddress] = useState('');
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<ScanResult | null>(null);
@@ -46,8 +29,8 @@ export default function ScannerPage() {
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash: txHash });
 
   const handleScan = async () => {
-    if (!code.trim()) {
-      setError('Please paste Solidity code to scan.');
+    if (!repoUrl.trim()) {
+      setError('Please paste a GitHub repository URL to scan.');
       return;
     }
     setError('');
@@ -56,10 +39,10 @@ export default function ScannerPage() {
 
     try {
       // Calls Person B's FastAPI backend
-      const response = await fetch('http://localhost:8000/api/scan', {
+      const response = await fetch('http://localhost:8000/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ repo_url: repoUrl }),
       });
 
       if (!response.ok) throw new Error(`API error: ${response.status}`);
@@ -128,22 +111,24 @@ export default function ScannerPage() {
         <div>
           <div className="card card-glow">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <span className="code-label">// SOLIDITY INPUT</span>
+              <span className="code-label">// GITHUB REPOSITORY URL</span>
               <button
                 className="btn-outline"
                 style={{ padding: '0.4rem 0.8rem', fontSize: '0.7rem' }}
-                onClick={() => setCode(PLACEHOLDER_CODE)}
+                onClick={() => setRepoUrl(PLACEHOLDER_REPO)}
               >
                 Load Demo
               </button>
             </div>
 
             <div className={scanning ? 'scan-line' : ''}>
-              <textarea
+              <input
+                type="text"
                 className="code-input"
-                placeholder="// Paste your Solidity contract here...&#10;// Example: pragma solidity ^0.8.0;"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
+                style={{ minHeight: '60px', fontSize: '0.9rem' }}
+                placeholder="https://github.com/username/repository"
+                value={repoUrl}
+                onChange={(e) => setRepoUrl(e.target.value)}
                 spellCheck={false}
               />
             </div>
