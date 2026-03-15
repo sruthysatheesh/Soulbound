@@ -22,10 +22,10 @@ def read_code_files(code_path: str) -> str:
                         
                         # Stop if we exceed character limit
                         if total_chars + len(content) > MAX_CHARS:
-                            code_content += f"\n\n--- FILE: {file} (truncated) ---\n{content[:500]}"
+                            code_content += f"\n\n--- FILE: {rel_path} (truncated) ---\n{content[:500]}"
                             return code_content
                         
-                        code_content += f"\n\n--- FILE: {file} ---\n{content}"
+                        code_content += f"\n\n--- FILE: {rel_path} ---\n{content}"
                         total_chars += len(content)
                 except:
                     pass

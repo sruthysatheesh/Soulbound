@@ -26,6 +26,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from tools.pr_evaluator import evaluate_patch_and_pin
+
 class RepoInput(BaseModel):
     repo_url: str
 
@@ -33,24 +35,46 @@ class DecryptInput(BaseModel):
     ipfs_uri: str
     private_key_pem: str
 
+class PREvalInput(BaseModel):
+    pr_url: str
+
 @app.post("/scan")
 async def scan(input: RepoInput):
     # Step 1 - Clone repo
     print("📥 Cloning repo...")
     code_path = clone_repo(input.repo_url)
-    
+
     # Step 2 - Scan for bugs
     print("🔍 Scanning for vulnerabilities...")
-    
+
     # Step 3 - AI analyzes results
     print("🤖 AI analyzing...")
     report = analyze(code_path)
-    
-    # Step 4 - Upload to IPFS
+
+    # Step 4 - Normalize file paths: strip the local clone prefix
+    # The AI may return "temp/soultest/bug.js" but the real path is "bug.js"
+    # code_path looks like "./temp/soultest" — strip that prefix from every file_path
+    import os as _os
+    clone_prefix = _os.path.normpath(code_path).replace("\\", "/").lstrip("./") + "/"
+    for vuln in report.get("vulnerabilities", []):
+        fp = (vuln.get("file_path") or "").replace("\\", "/")
+        # Strip the local temp prefix if present
+        if fp.startswith(clone_prefix):
+            vuln["file_path"] = fp[len(clone_prefix):]
+        elif "/" + clone_prefix.rstrip("/") + "/" in "/" + fp:
+            # Handle cases like "temp/soultest/src/file.js"
+            idx = fp.find(clone_prefix)
+            if idx != -1:
+                vuln["file_path"] = fp[idx + len(clone_prefix):]
+
+    # Store the repo URL so the frontend can build correct GitHub links
+    report["repo_url"] = input.repo_url.rstrip("/").replace(".git", "")
+
+    # Step 5 - Upload to IPFS
     print("📤 Uploading to IPFS...")
     ipfs_uri = upload_to_ipfs(report)
     report["ipfs_uri"] = ipfs_uri
-    
+
     print("✅ Done!")
     return report
 
@@ -91,3 +115,12 @@ async def decrypt(input: DecryptInput):
         
     except Exception as e:
         return {"error": f"Decryption failed. Invalid Key or IPFS Hash. ({str(e)})"}
+
+@app.post("/evaluate-pr")
+async def evaluate_pr_endpoint(input: PREvalInput):
+    try:
+        from tools.pr_evaluator import evaluate_patch_and_pin
+        result = evaluate_patch_and_pin(input.pr_url)
+        return {"status": "success", **result}
+    except Exception as e:
+        return {"error": str(e)}

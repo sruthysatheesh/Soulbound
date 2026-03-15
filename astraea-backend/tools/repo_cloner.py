@@ -8,6 +8,9 @@ def force_remove(action, name, exc):
     os.remove(name)
 
 def clone_repo(repo_url: str) -> str:
+    if repo_url.startswith("ipfs://"):
+        raise ValueError("Cannot clone an IPFS hash. Please provide a valid GitHub repository URL (e.g. https://github.com/User/Repo).")
+        
     repo_name = repo_url.split("/")[-1].replace(".git", "")
     clone_path = f"./temp/{repo_name}"
     

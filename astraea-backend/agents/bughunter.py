@@ -1,10 +1,9 @@
-from groq import Groq
 from dotenv import load_dotenv
 import os
 import json
+from tools.llm_client import get_client, clean_json
 
 load_dotenv()
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # ── TOOL 1: List all files ────────────────────────────────
 def list_repo_files(repo_path: str) -> str:
@@ -44,12 +43,24 @@ def search_pattern(repo_path: str, pattern: str) -> str:
 
 # ── AGENT LOOP ────────────────────────────────────────────
 def analyze(repo_path: str) -> dict:
-    print("\n🤖 TheBugHunter Agent Starting...\n")
+    # Re-read .env on each call so provider changes take effect without restart
+    load_dotenv(override=True)
+    client, LLM_MODEL = get_client()
+    # Pre-fetch the real file list and inject it into the system prompt
+    real_files = list_repo_files(repo_path)
+    print(f"\n📁 Real files in repo:\n{real_files}\n")
+
     messages = [
         {
             "role": "system",
-            "content": """You are TheBugHunter, an autonomous security auditing agent.
+            "content": f"""You are TheBugHunter, an autonomous security auditing agent.
 You find ALL vulnerabilities in code repositories step by step.
+
+The repository contains EXACTLY these files:
+{real_files}
+
+CRITICAL RULE: The `file_path` field in your FINAL JSON MUST be one of the exact filenames listed above.
+Do NOT invent, guess, or hallucinate file paths. If you are unsure about a file path, check the list above.
 
 You have these tools available:
 - list_files: lists all code files in repo
@@ -61,21 +72,21 @@ ACTION: tool_name
 INPUT: your input here
 
 When you have found ALL vulnerabilities, respond EXACTLY like this:
-FINAL: {
+FINAL: {{
     "status": "success",
     "total_bugs_found": 3,
     "vulnerabilities": [
-        {
+        {{
             "vulnerability_name": "name",
             "severity": "High/Medium/Low",
-            "file_path": "path/to/file",
+            "file_path": "MUST be one of the exact paths listed above",
             "line_number": 42,
             "description": "detailed explanation",
             "fix_suggestion": "how to fix it"
-        }
+        }}
     ],
     "ipfs_uri": "ipfs://pending"
-}"""
+}}"""
         },
         {
             "role": "user",
@@ -94,9 +105,10 @@ Follow these steps:
         print(f"🔄 Agent Step {step + 1}")
 
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=LLM_MODEL,
             messages=messages,
-            max_tokens=1000
+            max_tokens=1000,
+            temperature=0  # Deterministic — prevents hallucination of file paths
         )
 
         agent_output = response.choices[0].message.content
@@ -110,26 +122,13 @@ Follow these steps:
         # Check if agent is done
         if "FINAL:" in agent_output:
             try:
-                json_str = agent_output.split("FINAL:")[1].strip()
-                # Clean up markdown formatting if the LLM added it
-                if json_str.startswith("```json"):
-                    json_str = json_str[7:]
-                elif json_str.startswith("```"):
-                    json_str = json_str[3:]
-                if json_str.endswith("```"):
-                    json_str = json_str[:-3]
-                    
-                start = json_str.find("{")
-                end = json_str.rfind("}") + 1
-                if start == -1 or end == 0:
-                    raise ValueError("No JSON object found")
-                
-                return json.loads(json_str[start:end])
+                raw = agent_output.split("FINAL:")[1].strip()
+                return json.loads(clean_json(raw), strict=False)
             except Exception as e:
-                print(f"⚠️ Agent JSON parsing failed: {e}. Giving it another chance to fix it.")
+                print(f"⚠️ Agent JSON parsing failed: {e}. Asking model to retry.")
                 messages.append({
                     "role": "user",
-                    "content": f"Your JSON parsing failed with error: {str(e)}. Please output ONLY valid JSON without any conversational text or formatting issues."
+                    "content": f"Your JSON was invalid ({e}). Output ONLY a raw JSON object with no markdown, no comments, and no trailing commas."
                 })
                 continue
 
