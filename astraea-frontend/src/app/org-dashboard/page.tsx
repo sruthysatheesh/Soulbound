@@ -390,9 +390,16 @@ export default function OrgDashboard() {
                                         <h2 style={{ fontSize: '1.1rem', color: getSeverityColor(vuln.severity) }}>
                                             {vuln.vulnerability_name || 'Vulnerability Found'}
                                         </h2>
-                                        <span className="severity-pill" style={{ borderColor: getSeverityColor(vuln.severity), color: getSeverityColor(vuln.severity) }}>
-                                            {vuln.severity || 'UNKNOWN'} SEVERITY
-                                        </span>
+                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                            {vuln.cve_score !== undefined && (
+                                                <span className="severity-pill" style={{ background: '#000', borderColor: 'var(--text-secondary)', color: 'var(--text-primary)' }}>
+                                                    CVSS {(Number(vuln.cve_score)).toFixed(1)}
+                                                </span>
+                                            )}
+                                            <span className="severity-pill" style={{ borderColor: getSeverityColor(vuln.severity), color: getSeverityColor(vuln.severity) }}>
+                                                {vuln.severity || 'UNKNOWN'} SEVERITY
+                                            </span>
+                                        </div>
                                     </div>
 
                                     {/* Location */}

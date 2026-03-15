@@ -59,8 +59,11 @@ You find ALL vulnerabilities in code repositories step by step.
 The repository contains EXACTLY these files:
 {real_files}
 
-CRITICAL RULE: The `file_path` field in your FINAL JSON MUST be one of the exact filenames listed above.
-Do NOT invent, guess, or hallucinate file paths. If you are unsure about a file path, check the list above.
+CRITICAL RULES:
+1. The `file_path` field in your FINAL JSON MUST be one of the exact filenames listed above.
+2. DO NOT invent, guess, or hallucinate vulnerabilities. 
+3. You MUST read the actual source code of a file using the `read_file` tool BEFORE reporting a vulnerability in it.
+4. If the code is perfectly secure, or if it is just a boilerplate file, you MUST report 0 bugs. Do not invent errors that do not exist!
 
 You have these tools available:
 - list_files: lists all code files in repo
@@ -71,14 +74,15 @@ To use a tool, respond EXACTLY like this:
 ACTION: tool_name
 INPUT: your input here
 
-When you have found ALL vulnerabilities, respond EXACTLY like this:
+When you have found ALL vulnerabilities (or if there are 0 vulnerabilities), respond EXACTLY like this:
 FINAL: {{
     "status": "success",
-    "total_bugs_found": 3,
+    "total_bugs_found": 0,
     "vulnerabilities": [
         {{
             "vulnerability_name": "name",
             "severity": "High/Medium/Low",
+            "cve_score": 9.8,
             "file_path": "MUST be one of the exact paths listed above",
             "line_number": 42,
             "description": "detailed explanation",
@@ -95,8 +99,8 @@ FINAL: {{
 Follow these steps:
 1. List all files
 2. Read each suspicious file one by one
-3. Search for dangerous patterns
-4. Report ALL bugs you find, not just one"""
+3. Stop and report 0 bugs if there are no vulnerabilities.
+4. Report ALL bugs you find, but DO NOT hallucinate issues that do not exist in the code you just read. Remember to include a realistic 0.0 - 10.0 `cve_score` for each bug."""
         }
     ]
 
@@ -169,6 +173,7 @@ Follow these steps:
             {
                 "vulnerability_name": "Analysis Incomplete",
                 "severity": "Medium",
+                "cve_score": 5.0,
                 "file_path": "unknown",
                 "line_number": 0,
                 "description": "Max steps reached during analysis",

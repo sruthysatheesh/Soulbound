@@ -20,6 +20,7 @@ def evaluate_patch_and_pin(pr_url: str):
     owner, repo, pull = match.groups()
     diff_url = f"https://patch-diff.githubusercontent.com/raw/{owner}/{repo}/pull/{pull}.diff"
     
+    # ── 1. LLM PATCH EVALUATION ────────────────────────────────
     res = requests.get(diff_url)
     if res.status_code != 200:
         raise Exception(f"Failed to fetch PR diff from {diff_url}")

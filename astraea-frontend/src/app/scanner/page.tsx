@@ -8,6 +8,7 @@ interface ScanResult {
     status: string;
     vulnerability_name: string;
     severity: string;
+    cve_score?: number;
     line_number?: number;
     description: string;
     fix_suggestion: string;
@@ -53,6 +54,7 @@ export default function ScannerPage() {
                 status: 'success',
                 vulnerability_name: 'Reentrancy Attack',
                 severity: 'High',
+                cve_score: 8.5,
                 line_number: 15,
                 description: 'The withdraw() function sends ETH before updating the balance state variable. An attacker can recursively call withdraw() to drain the contract.',
                 fix_suggestion: 'Apply the Checks-Effects-Interactions pattern. Update balances[msg.sender] before the external call.',
@@ -194,9 +196,16 @@ export default function ScannerPage() {
                                         VULNERABILITY DETECTED
                                     </span>
                                 </div>
-                                <span className={`pill pill-${severityClass(result.severity)}`}>
-                                    {result.severity?.toUpperCase()} SEVERITY
-                                </span>
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                    {result.cve_score !== undefined && (
+                                        <span className="pill" style={{ background: '#000', borderColor: 'var(--text-secondary)', color: 'var(--text-primary)' }}>
+                                            CVSS {result.cve_score.toFixed(1)}
+                                        </span>
+                                    )}
+                                    <span className={`pill pill-${severityClass(result.severity)}`}>
+                                        {result.severity?.toUpperCase()} SEVERITY
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="report-body">
