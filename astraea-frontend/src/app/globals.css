@@ -8,19 +8,18 @@
   --border: #172a45;
   --border-glow: #172a4555;
 
-  /* Monochrome / Navy Accents */
   --primary: #ccd6f6;
   --primary-dim: #8892b0;
-  --accent: #64ffda;
+  --accent: #4d9fff;
   /* Used very sparingly if at all */
-  --accent-glow: #64ffda33;
+  --accent-glow: #4d9fff33;
 
   /* Severity / Bug Status Colors (Preserved) */
   --danger: #ff4444;
   --danger-glow: #ff444455;
   --warning: #ff9500;
-  --success: #00ff87;
-  --success-glow: #00ff8755;
+  --success: #e6f1ff;
+  --success-glow: #e6f1ff22;
 
   /* Text */
   --text-primary: #e6f1ff;

@@ -52,8 +52,7 @@ export default function HomePage() {
 
         {/* CTAs */}
         <div className="hero-ctas">
-          <Link href="/scanner" className="cta-primary">⚡ Launch Scanner</Link>
-          <Link href="/trust-graph" className="cta-secondary">Trust Graph →</Link>
+          <Link href="/scanner" className="cta-primary">Launch Scanner</Link>
         </div>
 
         {/* Stats row */}

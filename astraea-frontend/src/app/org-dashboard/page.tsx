@@ -294,18 +294,18 @@ export default function OrgDashboard() {
                             onClick={handleDecrypt}
                             disabled={decrypting}
                         >
-                            {decrypting ? <span><span className="spinner"></span> DECRYPTING...</span> : '🔓 DECRYPT ZERO-DAY REPORT'}
+                            {decrypting ? <span><span className="spinner"></span> DECRYPTING...</span> : 'DECRYPT ZERO-DAY REPORT'}
                         </button>
                     </div>
 
                     {/* Bounty / PR Verify Card */}
-                    <div className="card" style={{ marginTop: '2rem', borderColor: 'var(--success)' }}>
-                        <h2 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--success)' }}>ISSUE BOUNTY (SBT)</h2>
+                    <div className="card" style={{ marginTop: '2rem', borderColor: 'var(--primary)' }}>
+                        <h2 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--primary)' }}>ISSUE BOUNTY (SBT)</h2>
                         <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: '1.5' }}>
                             Paste a merged PR URL that references an assigned Astraea issue. The system verifies the IPFS hash in the PR description before issuing the SBT.
                         </p>
                         <div style={{ marginBottom: '1rem' }}>
-                            <span className="code-label" style={{ color: 'var(--success)' }}>// MERGED GITHUB PR URL</span>
+                            <span className="code-label" style={{ color: 'var(--primary)' }}>// MERGED GITHUB PR URL</span>
                             <input
                                 type="text"
                                 className="code-input"
@@ -321,18 +321,18 @@ export default function OrgDashboard() {
                         {!patchEval ? (
                             <button
                                 className="btn btn-primary"
-                                style={{ width: '100%', marginTop: '1rem', background: 'rgba(80, 250, 123, 0.1)', borderColor: 'var(--success)', color: 'var(--success)' }}
+                                style={{ width: '100%', marginTop: '1rem', background: 'rgba(77, 159, 255, 0.1)', borderColor: 'var(--accent)', color: 'var(--accent)' }}
                                 onClick={handleVerifyPr}
                                 disabled={verifyingPr || !prUrl}
                             >
                                 {verifyingPr
-                                    ? <span><span className="spinner" style={{ borderTopColor: 'var(--success)' }}></span> VERIFYING & EVALUATING...</span>
-                                    : '🔍 ANALYZE PATCH & VERIFY'}
+                                    ? <span><span className="spinner" style={{ borderTopColor: 'var(--accent)' }}></span> VERIFYING & EVALUATING...</span>
+                                    : 'ANALYZE PATCH & VERIFY'}
                             </button>
                         ) : (
                             <div style={{ marginTop: '1.5rem', borderTop: '1px dashed var(--border)', paddingTop: '1.5rem' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                                    <h3 style={{ fontSize: '1.05rem', color: '#fff' }}>🤖 AI Patch Evaluation</h3>
+                                    <h3 style={{ fontSize: '1.05rem', color: '#fff' }}>AI Patch Evaluation</h3>
                                     <span className="severity-pill" style={{ borderColor: 'var(--primary)', color: 'var(--primary)' }}>SCORE: {patchEval.score}/100</span>
                                 </div>
                                 <div style={{ marginBottom: '0.75rem' }}>
@@ -345,27 +345,27 @@ export default function OrgDashboard() {
                                 </div>
                                 {matchedIssueId && (
                                     <div style={{ marginBottom: '0.75rem' }}>
-                                        <span className="code-label" style={{ color: 'var(--success)' }}>// RESOLVES ASSIGNED ISSUE</span>
-                                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--success)', marginTop: '0.25rem' }}>{matchedIssueId}</p>
+                                        <span className="code-label" style={{ color: 'var(--primary)' }}>// RESOLVES ASSIGNED ISSUE</span>
+                                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--primary)', marginTop: '0.25rem' }}>{matchedIssueId}</p>
                                     </div>
                                 )}
                                 <div style={{ marginBottom: '1.25rem' }}>
                                     <span className="code-label">// METADATA URI</span>
                                     <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{bountyUri}</p>
                                 </div>
-                                <div className="alert alert-success" style={{ marginBottom: '1.25rem', background: 'rgba(80, 250, 123, 0.1)', borderColor: 'var(--success)', fontSize: '0.83rem' }}>
-                                    ✅ Merged by <strong>@{hackerGithub}</strong> · Wallet: <span style={{ fontFamily: 'var(--font-mono)' }}>{foundWallet.substring(0, 8)}...{foundWallet.substring(34)}</span>
+                                <div className="alert alert-info" style={{ marginBottom: '1.25rem', background: 'rgba(77, 159, 255, 0.1)', borderColor: 'var(--accent)', fontSize: '0.83rem' }}>
+                                    Merged by <strong>@{hackerGithub}</strong> · Wallet: <span style={{ fontFamily: 'var(--font-mono)' }}>{foundWallet.substring(0, 8)}...{foundWallet.substring(34)}</span>
                                 </div>
                                 {isConnected ? (
                                     <button
                                         className="btn btn-primary"
-                                        style={{ width: '100%', background: 'var(--success)', borderColor: 'var(--success)', color: '#000', fontWeight: 'bold' }}
+                                        style={{ width: '100%', background: 'var(--primary)', borderColor: 'var(--primary)', color: '#000', fontWeight: 'bold' }}
                                         onClick={handleMintBounty}
                                         disabled={isMinting || isConfirming || isConfirmed}
                                     >
                                         {isMinting || isConfirming
                                             ? <span><span className="spinner" style={{ borderTopColor: '#000' }}></span> MINTING...</span>
-                                            : isConfirmed ? '✅ SBT BOUNTY ISSUED' : '🏆 MINT EVALUATED SBT'}
+                                            : isConfirmed ? 'SBT BOUNTY ISSUED' : 'MINT EVALUATED SBT'}
                                     </button>
                                 ) : (
                                     <div className="alert alert-warning" style={{ fontSize: '0.82rem' }}>⚠ Connect wallet to mint.</div>
@@ -419,7 +419,7 @@ export default function OrgDashboard() {
                                     {/* Fix Suggestion */}
                                     {vuln.fix_suggestion && (
                                         <div style={{ marginBottom: '1rem' }}>
-                                            <span className="code-label" style={{ color: 'var(--success)' }}>// SUGGESTED FIX</span>
+                                            <span className="code-label" style={{ color: 'var(--primary)' }}>// SUGGESTED FIX</span>
                                             <p style={{ fontSize: '0.9rem', lineHeight: '1.6', marginTop: '0.4rem', color: '#ccc' }}>{vuln.fix_suggestion}</p>
                                         </div>
                                     )}
@@ -475,10 +475,10 @@ export default function OrgDashboard() {
                                                 disabled={!assignTarget[index]?.trim() || !ipfsUri || assignedFlags[index]}
                                                 style={{
                                                     padding: '0.55rem 1rem',
-                                                    background: assignedFlags[index] ? 'rgba(80,250,123,0.15)' : 'rgba(189,147,249,0.1)',
-                                                    border: `1px solid ${assignedFlags[index] ? 'var(--success)' : 'var(--primary)'}`,
+                                                    background: assignedFlags[index] ? 'rgba(77, 159, 255, 0.15)' : 'rgba(77, 159, 255, 0.08)',
+                                                    border: `1px solid ${assignedFlags[index] ? 'var(--primary)' : 'var(--accent)'}`,
                                                     borderRadius: '4px',
-                                                    color: assignedFlags[index] ? 'var(--success)' : 'var(--primary)',
+                                                    color: assignedFlags[index] ? 'var(--primary)' : 'var(--accent)',
                                                     fontFamily: 'Orbitron, monospace',
                                                     fontSize: '0.7rem',
                                                     cursor: 'pointer',
@@ -500,7 +500,6 @@ export default function OrgDashboard() {
                         </div>
                     ) : (
                         <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.5, borderStyle: 'dashed' }}>
-                            <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔒</div>
                             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>AWAITING ENCRYPTED PAYLOAD</p>
                         </div>
                     )}

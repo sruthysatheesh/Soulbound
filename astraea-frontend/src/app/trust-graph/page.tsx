@@ -14,26 +14,18 @@ interface SBTMetadata {
     ipfs_uri: string;
 }
 
-// Severity to icon/class mapping
-const severityMap: Record<string, { icon: string; cls: string }> = {
-    High: { icon: '🔴', cls: 'high' },
-    Medium: { icon: '🟡', cls: 'medium' },
-    Low: { icon: '🟢', cls: 'low' },
-};
-
-// Demo badges to show when wallet has no tokens
 const DEMO_BADGES: SBTMetadata[] = [
     {
-        tokenId: 0,
+        tokenId: 1,
         name: 'Reentrancy Exploit',
         severity: 'High',
-        description: 'Identified critical reentrancy vulnerability in DeFi vault contract.',
+        description: 'Critical reentrancy vulnerability in DeFi vault withdraw().',
         auditor_ai: 'Astraea Agent v1.0',
         timestamp: '1710500000',
         ipfs_uri: 'ipfs://QmDemo1...',
     },
     {
-        tokenId: 1,
+        tokenId: 2,
         name: 'Integer Overflow',
         severity: 'Medium',
         description: 'Unchecked arithmetic in token minting logic.',
@@ -42,7 +34,7 @@ const DEMO_BADGES: SBTMetadata[] = [
         ipfs_uri: 'ipfs://QmDemo2...',
     },
     {
-        tokenId: 2,
+        tokenId: 3,
         name: 'Access Control Bypass',
         severity: 'High',
         description: 'Missing onlyOwner modifier on privileged liquidity function.',
@@ -52,44 +44,112 @@ const DEMO_BADGES: SBTMetadata[] = [
     },
 ];
 
-function BadgeCard({ badge }: { badge: SBTMetadata }) {
-    const { icon, cls } = severityMap[badge.severity] || { icon: '⚪', cls: 'low' };
+function getSeverityColor(severity: string) {
+    if (severity === 'High') return 'var(--danger)';
+    if (severity === 'Medium') return 'var(--warning)';
+    return 'var(--text-secondary)';
+}
+
+function SBTTreeNode({ badge, isLast }: { badge: SBTMetadata; isLast: boolean }) {
+    const [expanded, setExpanded] = useState(false);
     const date = new Date(Number(badge.timestamp) * 1000).toLocaleDateString('en-US', {
         year: 'numeric', month: 'short', day: 'numeric',
     });
+    const sevColor = getSeverityColor(badge.severity);
 
     return (
-        <div className={`badge-card severity-${cls.toLowerCase()} fade-in`}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div className={`badge-icon ${cls}`}>{icon}</div>
-                <span className={`pill pill-${cls}`}>{badge.severity}</span>
-            </div>
+        <div style={{ position: 'relative', paddingLeft: '2rem' }}>
+            {/* Vertical connector line */}
+            <div style={{
+                position: 'absolute',
+                left: '0.6rem',
+                top: 0,
+                bottom: isLast ? '50%' : 0,
+                width: '1px',
+                background: 'var(--border)',
+            }} />
+            {/* Horizontal branch */}
+            <div style={{
+                position: 'absolute',
+                left: '0.6rem',
+                top: '1.5rem',
+                width: '1.4rem',
+                height: '1px',
+                background: 'var(--border)',
+            }} />
 
-            <div>
-                <div style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.25rem' }}>
-                    {badge.name}
+            {/* Node */}
+            <div
+                onClick={() => setExpanded(e => !e)}
+                style={{
+                    cursor: 'pointer',
+                    marginBottom: '0.75rem',
+                    padding: '0.75rem 1rem',
+                    background: 'var(--bg-surface)',
+                    border: `1px solid ${expanded ? sevColor : 'var(--border)'}`,
+                    borderRadius: '6px',
+                    transition: 'border-color 0.2s, background 0.2s',
+                    userSelect: 'none',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = sevColor)}
+                onMouseLeave={e => { if (!expanded) e.currentTarget.style.borderColor = 'var(--border)'; }}
+            >
+                {/* Node header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
+                        <span style={{
+                            fontFamily: 'monospace',
+                            fontSize: '0.7rem',
+                            color: 'var(--text-dim)',
+                            whiteSpace: 'nowrap',
+                        }}>
+                            #{String(badge.tokenId).padStart(4, '0')}
+                        </span>
+                        <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {badge.name}
+                        </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                        <span style={{
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            color: sevColor,
+                            border: `1px solid ${sevColor}`,
+                            borderRadius: '3px',
+                            padding: '0.1rem 0.4rem',
+                        }}>
+                            {badge.severity.toUpperCase()}
+                        </span>
+                        <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                            {expanded ? '[-]' : '[+]'}
+                        </span>
+                    </div>
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    {badge.description}
-                </div>
-            </div>
 
-            <div className="divider" style={{ margin: '0.5rem 0' }} />
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div>
-                    <div className="report-field-label">Auditor</div>
-                    <div className="tag">{badge.auditor_ai}</div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                    <div className="report-field-label">Issued</div>
-                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>{date}</div>
-                </div>
-            </div>
-
-            <div style={{ marginTop: '0.25rem' }}>
-                <div className="report-field-label">Token ID</div>
-                <div className="report-field-value mono">#{badge.tokenId.toString().padStart(4, '0')}</div>
+                {/* Expanded detail */}
+                {expanded && (
+                    <div style={{ marginTop: '0.75rem', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1.5rem', marginBottom: '0.6rem' }}>
+                            <div>
+                                <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '0.15rem' }}>ISSUED</div>
+                                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{date}</div>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '0.15rem' }}>AUDITOR</div>
+                                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{badge.auditor_ai}</div>
+                            </div>
+                        </div>
+                        <div style={{ marginBottom: '0.6rem' }}>
+                            <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '0.15rem' }}>DESCRIPTION</div>
+                            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{badge.description}</div>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '0.15rem' }}>IPFS REPORT</div>
+                            <div style={{ fontFamily: 'monospace', fontSize: '0.73rem', color: 'var(--primary)', wordBreak: 'break-all' }}>{badge.ipfs_uri}</div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -101,7 +161,6 @@ export default function TrustGraphPage() {
     const [loading, setLoading] = useState(false);
     const [showDemo, setShowDemo] = useState(false);
 
-    // Read total balance of SBTs for the connected wallet
     const { data: balance } = useReadContract({
         address: contractData.address as `0x${string}`,
         abi: contractData.abi,
@@ -110,8 +169,6 @@ export default function TrustGraphPage() {
     });
 
     useEffect(() => {
-        // When connected, show loading state and attempt to load real data
-        // For hackathon: if no real tokens yet, show demo data
         if (isConnected) {
             setLoading(true);
             setTimeout(() => {
@@ -128,81 +185,92 @@ export default function TrustGraphPage() {
     const medCount = badges.filter(b => b.severity === 'Medium').length;
     const lowCount = badges.filter(b => b.severity === 'Low').length;
 
+    const shortAddr = address ? `${address.slice(0, 8)}...${address.slice(-6)}` : '';
+
     return (
         <main className="page">
             {/* Header */}
             <div style={{ marginBottom: '2rem' }}>
-                <h1 className="section-title">Hacker Trust Graph</h1>
+                <h1 className="section-title">Hunter Trust Graph</h1>
                 <p className="section-sub">
-                    Your on-chain security reputation. Each badge is a Soulbound Token (SBT) representing a verified vulnerability discovery — permanently tied to your wallet.
+                    On-chain security reputation tree. Each node is a Soulbound Token minted for a verified vulnerability discovery.
                 </p>
             </div>
 
             {!isConnected ? (
-                <div className="card" style={{ textAlign: 'center', padding: '4rem', maxWidth: 500, margin: '0 auto' }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🔐</div>
-                    <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '1rem', marginBottom: '0.75rem' }}>
-                        Connect your wallet
+                <div className="card" style={{ textAlign: 'center', padding: '4rem', maxWidth: 480, margin: '0 auto' }}>
+                    <div style={{ fontFamily: 'monospace', fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '1rem' }}>
+                        [ CONNECT WALLET ]
                     </div>
                     <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                        Connect your MetaMask (with the Hardhat test account) to view your Soulbound Verification Badges.
+                        Connect your MetaMask to view your Soulbound Verification Badges as a trust tree.
                     </div>
                 </div>
             ) : (
                 <>
-                    {/* Wallet info */}
-                    <div className="card" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                        <div className="pulse-dot green" />
-                        <div>
-                            <div className="report-field-label">Connected Wallet</div>
-                            <div className="report-field-value mono" style={{ fontSize: '0.85rem' }}>{address}</div>
-                        </div>
-                        <div style={{ marginLeft: 'auto', display: 'flex', gap: '1rem' }}>
-                            <div className="stat-box">
-                                <div className="stat-value" style={{ color: 'var(--danger)' }}>{highCount}</div>
-                                <div className="stat-label">High</div>
-                            </div>
-                            <div className="stat-box">
-                                <div className="stat-value" style={{ color: 'var(--warning)' }}>{medCount}</div>
-                                <div className="stat-label">Medium</div>
-                            </div>
-                            <div className="stat-box">
-                                <div className="stat-value" style={{ color: 'var(--success)' }}>{lowCount}</div>
-                                <div className="stat-label">Low</div>
-                            </div>
-                            <div className="stat-box">
-                                <div className="stat-value">{badges.length}</div>
-                                <div className="stat-label">Total SBTs</div>
-                            </div>
-                        </div>
-                    </div>
-
                     {showDemo && (
                         <div className="alert alert-warning" style={{ marginBottom: '1.5rem' }}>
-                            ⚠ No minted SBTs found for this wallet. Showing demo badges. Run a scan and mint a badge to populate real data!
+                            ⚠ No real SBTs found for this wallet — displaying demo data. Scan a contract and mint a badge to populate.
                         </div>
                     )}
 
                     {loading ? (
                         <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>
-                            <div className="spinner" style={{ width: 40, height: 40, borderWidth: 3, margin: '0 auto 1rem' }} />
-                            <div>Loading your badges...</div>
+                            <div className="spinner" style={{ width: 36, height: 36, borderWidth: 2, margin: '0 auto 1rem' }} />
+                            <div>Loading badges...</div>
                         </div>
                     ) : (
-                        <div className="grid-3">
-                            {badges.map((badge) => (
-                                <BadgeCard key={badge.tokenId} badge={badge} />
-                            ))}
-                        </div>
-                    )}
-
-                    {badges.length === 0 && !loading && (
-                        <div className="card" style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>
-                            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏆</div>
-                            <div>No verification badges yet.</div>
-                            <div style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
-                                Go to the <a href="/" style={{ color: 'var(--primary)' }}>Scanner</a> to analyze a contract and mint your first badge.
+                        <div style={{ maxWidth: 740, margin: '0 auto' }}>
+                            {/* ── Root node: wallet ─────────────────── */}
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                padding: '0.9rem 1.1rem',
+                                background: 'var(--bg-card)',
+                                border: '1px solid var(--primary)',
+                                borderRadius: '8px',
+                                marginBottom: 0,
+                            }}>
+                                <div className="pulse-dot blue" />
+                                <div>
+                                    <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--text-dim)', marginBottom: '0.2rem' }}>ROOT — WALLET</div>
+                                    <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--primary)' }}>{address}</div>
+                                </div>
+                                <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.75rem' }}>
+                                    {[
+                                        { label: 'HIGH', count: highCount, color: 'var(--danger)' },
+                                        { label: 'MED', count: medCount, color: 'var(--warning)' },
+                                        { label: 'LOW', count: lowCount, color: 'var(--text-secondary)' },
+                                        { label: 'TOTAL', count: badges.length, color: 'var(--primary)' },
+                                    ].map(({ label, count, color }) => (
+                                        <div key={label} style={{ textAlign: 'center' }}>
+                                            <div style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '1rem', color }}>{count}</div>
+                                            <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', letterSpacing: '0.1em' }}>{label}</div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
+                            {/* ── Trunk line connecting root to children ── */}
+                            <div style={{ marginLeft: '0.6rem', width: '1px', height: '1.5rem', background: 'var(--border)' }} />
+
+                            {/* ── SBT child nodes ────────────────────── */}
+                            {badges.length === 0 ? (
+                                <div style={{ paddingLeft: '2rem', color: 'var(--text-dim)', fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                                    └── [ no badges minted ]
+                                </div>
+                            ) : (
+                                <div>
+                                    {badges.map((badge, i) => (
+                                        <SBTTreeNode
+                                            key={badge.tokenId}
+                                            badge={badge}
+                                            isLast={i === badges.length - 1}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )}
                 </>

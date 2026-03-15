@@ -160,7 +160,7 @@ export default function HackerProfile() {
         <div style={gs.page}>
             <div style={gs.container}>
                 <div style={gs.header}>
-                    <h1 style={gs.title}>HACKER PROFILE</h1>
+                    <h1 style={gs.title}>HUNTER PROFILE</h1>
                     <p style={gs.subtitle}>Identity, Assigned Issues & Soulbound Achievement Record</p>
                 </div>
 

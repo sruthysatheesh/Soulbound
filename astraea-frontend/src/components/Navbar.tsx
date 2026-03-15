@@ -16,7 +16,6 @@ export default function Navbar() {
             </div>
             <div className="nav-right">
                 <a href="/scanner" className="nav-link">Scanner</a>
-                <a href="/trust-graph" className="nav-link">Trust Graph</a>
                 <a href="/org-dashboard" className="nav-link" style={{ color: '#ffb86c' }}>Org Portal</a>
                 <a href="/profile" className="nav-link" style={{ color: '#8be9fd' }}>Hacker Profile</a>
                 <ConnectButton

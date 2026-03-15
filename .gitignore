@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Node.js
 node_modules/
 .npm
@@ -46,9 +47,20 @@ __pycache__/
 *.pem
 *.vscode
 .vscode_hardhat_config_*.ts
+=======
+# API Keys - NEVER push
+.env
 
-# Cloned repos
+# Cloned repos - too large
 temp/
+
+# Python cache - auto generated
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
 
 # Ngrok executable
 ngrok.exe
+>>>>>>> 328f218fd5fdc31a4fb3306377eb00b9f8716f06
