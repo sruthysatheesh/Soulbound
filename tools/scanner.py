@@ -1,37 +1,85 @@
+import subprocess
+import sys
 import os
+import json
 
-def detect_language(code_path: str) -> str:
-    for root, dirs, files in os.walk(code_path):
-        for file in files:
-            if file.endswith(".sol"):
-                return "solidity"
-    return "general"
+def run_semgrep(code_path: str) -> str:
+    try:
+        print("🔍 Running Semgrep...")
 
-def read_code_files(code_path: str) -> str:
-    code_content = ""
-    total_chars = 0
-    MAX_CHARS = 30000  # AI token limit safety cap
+        result = subprocess.run(
+            [
+                sys.executable, "-m", "semgrep",
+                "--config", "auto",
+                "--json",
+                "--quiet",
+                "--timeout", "30",
+                code_path
+            ],
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
 
-    for root, dirs, files in os.walk(code_path):
-        for file in files:
-            if file.endswith((".sol", ".py", ".js", ".ts")):
-                file_path = os.path.join(root, file)
-                try:
-                    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                        content = f.read()
-                        
-                        # Stop if we exceed character limit
-                        if total_chars + len(content) > MAX_CHARS:
-                            code_content += f"\n\n--- FILE: {file} (truncated) ---\n{content[:500]}"
-                            return code_content
-                        
-                        code_content += f"\n\n--- FILE: {file} ---\n{content}"
-                        total_chars += len(content)
-                except:
-                    pass
+        if result.stdout:
+            return result.stdout
+        else:
+            print(f"⚠️ Semgrep stderr: {result.stderr[:300]}")
+            return ""
 
-    return code_content if code_content else "No code files found"
+    except subprocess.TimeoutExpired:
+        print("⚠️ Semgrep timed out after 60s")
+        return ""
+    except Exception as e:
+        print(f"⚠️ Semgrep failed: {str(e)}")
+        return ""
+
+def parse_semgrep_output(raw: str) -> list:
+    if not raw:
+        return []
+
+    try:
+        data = json.loads(raw)
+        findings = []
+
+        for result in data.get("results", []):
+            findings.append({
+                "rule": result.get("check_id", "unknown"),
+                "file": os.path.basename(
+                    result.get("path", "unknown")
+                ),
+                "line": result.get("start", {}).get("line", 0),
+                "message": result.get(
+                    "extra", {}
+                ).get("message", ""),
+                "severity": result.get(
+                    "extra", {}
+                ).get("severity", "WARNING")
+            })
+
+        return findings
+    except:
+        return []
 
 def run_scanner(code_path: str) -> str:
-    print("📖 Reading all code files...")
-    return read_code_files(code_path)
+    raw = run_semgrep(code_path)
+    findings = parse_semgrep_output(raw)
+
+    if not findings:
+        print("⚠️ Semgrep found no issues")
+        return "Semgrep found no issues or scan failed"
+
+    print(f"✅ Semgrep found {len(findings)} issues!")
+
+    output = f"Semgrep found {len(findings)} security issues:\n\n"
+
+    for i, f in enumerate(findings, 1):
+        output += f"""Issue {i}:
+Rule     : {f['rule']}
+File     : {f['file']}
+Line     : {f['line']}
+Severity : {f['severity']}
+Message  : {f['message']}
+---
+"""
+    return output
