@@ -46,3 +46,9 @@ __pycache__/
 *.pem
 *.vscode
 .vscode_hardhat_config_*.ts
+
+# Cloned repos
+temp/
+
+# Ngrok executable
+ngrok.exe
