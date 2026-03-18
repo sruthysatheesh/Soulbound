@@ -2,13 +2,13 @@
 
 **Intelligent Security Auditing & Decentralized Trust Graph**
 
-Astraea is an AI-powered security ecosystem designed to secure the future of software development. It combines autonomous vulnerability detection with a verifiable, on-chain reputation system for security researchers.
+Soulbound is an AI-powered security ecosystem designed to secure the future of software development. It combines autonomous vulnerability detection with a verifiable, on-chain reputation system for security researchers.
 
 ---
 
 ##  Overview
 
-In a world where security breaches cost billions, Astraea bridges the gap between organizations and white-hat hackers. 
+In a world where security breaches cost billions, Soulbound bridges the gap between organizations and white-hat hackers. 
 
 - **Autonomous Recognition**: AI agents that scan repositories in real-time as code is pushed.
 - **Secure Disclosure**: Encrypted reporting ensures vulnerabilities are shared only with the right hands.
