@@ -1,4 +1,4 @@
-# Astraea Protocol 🛡️
+# SOULBOUND
 
 **Intelligent Security Auditing & Decentralized Trust Graph**
 
@@ -18,7 +18,7 @@ In a world where security breaches cost billions, Astraea bridges the gap betwee
 
 ## Key Features
 
-### 🔍 AI-Powered Reconnaissance
+### AI-Powered Reconnaissance
 Our specialized AI agent, **TheBugHunter**, combines static analysis (Semgrep) with advanced LLM reasoning to identify complex logic flaws, access control issues, and hidden vulnerabilities that traditional scanners miss.
 
 ### Zero-Day Shield
