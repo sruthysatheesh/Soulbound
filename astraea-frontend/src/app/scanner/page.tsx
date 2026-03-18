@@ -191,10 +191,10 @@ export default function ScannerPage() {
                 </div>
 
                 {/* Agent Toggle */}
-                <div className="card" style={{ padding: '1rem', borderColor: isAutoScanActive ? 'var(--primary)' : '' }}>
+                <div className="card" style={{ padding: '1rem', background: isAutoScanActive ? 'rgba(80, 250, 123, 0.05)' : '', borderColor: isAutoScanActive ? 'var(--success)' : '' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <div>
-                            <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#fff' }}>Autonomous Agent</div>
+                            <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: isAutoScanActive ? 'var(--success)' : '#fff' }}>🤖 Autonomous Agent</div>
                             <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Auto-scan {orgName} pushes</div>
                         </div>
                         <button
@@ -254,7 +254,7 @@ export default function ScannerPage() {
                                         Analyzing...
                                     </>
                                 ) : (
-                                    <> Run Reconnaissance</>
+                                    <> ⚡ Run Reconnaissance</>
                                 )}
                             </button>
                             {scanning && <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>AI scanning in progress...</span>}
@@ -271,7 +271,8 @@ export default function ScannerPage() {
                 <div>
                     {!result && !scanning && (
                         <div className="card" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
-                            <div style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: '0.9rem', color: 'var(--primary)' }}>[ STANDBY ]</div>
+                            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🛡</div>
+                            <div style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: '0.9rem' }}>Awaiting target</div>
                             <div style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>Paste Solidity code and run reconnaissance</div>
                         </div>
                     )}
@@ -335,7 +336,7 @@ export default function ScannerPage() {
 
                                 <div className="report-field">
                                     <div className="report-field-label">Fix Suggestion</div>
-                                    <div className="report-field-value" style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                                    <div className="report-field-value" style={{ color: 'var(--success)', lineHeight: 1.7 }}>
                                         {result.fix_suggestion}
                                     </div>
                                 </div>
@@ -379,9 +380,9 @@ export default function ScannerPage() {
                                             {isMinting || isConfirming ? (
                                                 <><div className="spinner" style={{ borderTopColor: 'var(--text-primary)' }} /> Confirming...</>
                                             ) : isConfirmed ? (
-                                                <> Badge Minted!</>
+                                                <>✅ Badge Minted!</>
                                             ) : (
-                                                <>Mint SBT Badge</>
+                                                <>🔐 Mint SBT Badge</>
                                             )}
                                         </button>
                                     ) : (
@@ -390,7 +391,7 @@ export default function ScannerPage() {
 
                                     {isConfirmed && (
                                         <div className="alert alert-info" style={{ marginTop: '1rem' }}>
-                                            Soulbound Token minted on-chain! View it in the <a href="/trust-graph" style={{ color: 'var(--primary)' }}>Trust Graph →</a>
+                                            ✅ Soulbound Token minted on-chain! View it in the <a href="/trust-graph" style={{ color: 'var(--primary)' }}>Trust Graph →</a>
                                         </div>
                                     )}
                                 </div>
@@ -403,7 +404,7 @@ export default function ScannerPage() {
             {/* Agent Logs */}
             {isAutoScanActive && (
                 <div style={{ marginTop: '2rem' }}>
-                    <h2 className="section-title" style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Agent Scanning Logs</h2>
+                    <h2 className="section-title" style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>🤖 Agent Scanning Logs</h2>
                     <div className="card" style={{ padding: '1.5rem', background: '#050810', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', height: '300px', overflowY: 'auto' }}>
                         {unscannedRepos.length > 0 && (
                             <div style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>

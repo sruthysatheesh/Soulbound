@@ -6,7 +6,7 @@ Astraea is an AI-powered security ecosystem designed to secure the future of sof
 
 ---
 
-## 🚀 Overview
+##  Overview
 
 In a world where security breaches cost billions, Astraea bridges the gap between organizations and white-hat hackers. 
 
@@ -16,23 +16,23 @@ In a world where security breaches cost billions, Astraea bridges the gap betwee
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### 🔍 AI-Powered Reconnaissance
 Our specialized AI agent, **TheBugHunter**, combines static analysis (Semgrep) with advanced LLM reasoning to identify complex logic flaws, access control issues, and hidden vulnerabilities that traditional scanners miss.
 
-### 🔐 Zero-Day Shield
+### Zero-Day Shield
 Vulnerability reports are encrypted using organization-specific public keys and stored on IPFS. Organizations use their private keys to safely decrypt and act on these findings.
 
-### 🌳 Trust Graph
+### Trust Graph
 A visual representation of a researcher's on-chain pedigree. Every verified hunter has a "Trust Tree" rooted at their wallet address, branching out into verified discoveries (SBTs).
 
-### 🕵️ Developer Fingerprinting
+### Developer Fingerprinting
 Advanced similarity analysis ensures that patch creators are the legitimate owners of the fix, preventing reputation theft in the bug bounty ecosystem.
 
 ---
 
-## 🛠️ Technical Architecture
+## Technical Architecture
 
 ### Frontend (Next.js)
 - **Framework**: Next.js 15+ (App Router)
@@ -52,7 +52,7 @@ Advanced similarity analysis ensures that patch creators are the legitimate owne
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 ├── astraea-frontend/   # Next.js Web App
@@ -65,7 +65,7 @@ Advanced similarity analysis ensures that patch creators are the legitimate owne
 
 ---
 
-## 🚦 Getting Started
+##  Getting Started
 
 ### 1. Prerequisites
 - Node.js (v18+)
@@ -94,9 +94,5 @@ npm install
 npm run dev
 ```
 
----
 
-## ⚖️ License
-
-Astraea is built for the Future of Security. All rights reserved by the Astraea Protocol team.
 
