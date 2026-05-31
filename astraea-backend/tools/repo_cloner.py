@@ -20,8 +20,8 @@ def clone_repo(repo_url: str) -> str:
     if os.path.exists(clone_path):
         shutil.rmtree(clone_path, onerror=force_remove)
     
-    print(f"📥 Cloning {repo_url}...")
+    print(f"Cloning {repo_url}...")
     git.Repo.clone_from(repo_url, clone_path)
-    print(f"✅ Cloned successfully!")
+    print(f"Cloned successfully!")
     
     return clone_path
