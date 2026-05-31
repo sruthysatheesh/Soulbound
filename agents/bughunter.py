@@ -7,7 +7,7 @@ load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def analyze(repo_path: str, scanner_output: str = "") -> dict:
-    print("\n🤖 TheBugHunter Agent Starting...\n")
+    print("\nTheBugHunter Agent Starting...\n")
 
     # Read code files directly as backup
     code_content = ""
@@ -45,7 +45,7 @@ Semgrep scanner results:
 Actual code for context:
 {code_content[:2000]}
 """
-        print("✅ Using Semgrep findings for analysis")
+        print("Using Semgrep findings for analysis")
     else:
         # Fallback — AI reads code directly
         analysis_input = f"""
@@ -54,7 +54,7 @@ Analyze this code directly for vulnerabilities:
 
 {code_content[:3000]}
 """
-        print("⚠️ Semgrep found nothing — AI reading code directly")
+        print("Semgrep found nothing — AI reading code directly")
 
     messages = [
         {
@@ -109,7 +109,7 @@ Respond ONLY in this JSON format:
 
     # Agent loop
     for step in range(5):
-        print(f"🔄 Agent Step {step + 1}")
+        print(f"Agent Step {step + 1}")
 
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -142,7 +142,7 @@ Respond ONLY in this JSON format:
                     result["vulnerabilities"]
                 )
 
-            print(f"✅ Found {result['total_bugs_found']} vulnerabilities!")
+            print(f"Found {result['total_bugs_found']} vulnerabilities!")
             return result
 
         except:

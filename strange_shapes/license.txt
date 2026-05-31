@@ -1,0 +1,11 @@
+Model Information:
+* title:	Strange Shapes
+* source:	https://sketchfab.com/3d-models/strange-shapes-7ed5a28c8016424e821c161c87f89bd2
+* author:	Daniel Pérez Legido (https://sketchfab.com/daniel.perez)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Strange Shapes" (https://sketchfab.com/3d-models/strange-shapes-7ed5a28c8016424e821c161c87f89bd2) by Daniel Pérez Legido (https://sketchfab.com/daniel.perez) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
