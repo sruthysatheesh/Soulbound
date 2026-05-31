@@ -14,6 +14,8 @@ def clone_repo(repo_url: str) -> str:
     repo_name = repo_url.split("/")[-1].replace(".git", "")
     clone_path = f"./temp/{repo_name}"
     
+    os.makedirs("./temp", exist_ok=True)
+    
     # Force delete even read-only files (Windows fix)
     if os.path.exists(clone_path):
         shutil.rmtree(clone_path, onerror=force_remove)
