@@ -61,7 +61,7 @@ export default function HackerProfile() {
         }
 
         if (user) {
-            const assignKey = `astraea_assignments_${user.toLowerCase()}`;
+            const assignKey = `SOULBOUND_assignments_${user.toLowerCase()}`;
             const assignData = localStorage.getItem(assignKey);
             if (assignData) {
                 // Parse and strictly sort by date descending
@@ -71,7 +71,7 @@ export default function HackerProfile() {
             }
         }
 
-        const sbtKey = `astraea_sbts_${addr.toLowerCase()}`;
+        const sbtKey = `SOULBOUND_sbts_${addr.toLowerCase()}`;
         const sbtData = localStorage.getItem(sbtKey);
         if (sbtData) setSbts(JSON.parse(sbtData));
     };
@@ -97,7 +97,7 @@ export default function HackerProfile() {
     };
 
     const copySnippet = (hash: string, id: string) => {
-        navigator.clipboard.writeText(`Fixes: ASTRAEA-ISSUE ipfs://${hash}`);
+        navigator.clipboard.writeText(`Fixes: SOULBOUND-ISSUE ipfs://${hash}`);
         setCopiedId(id);
         setTimeout(() => setCopiedId(null), 2500);
     };
@@ -267,7 +267,7 @@ export default function HackerProfile() {
                                             {/* PR snippet to copy */}
                                             <div style={{ borderTop: '1px solid #1a1a1a', padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', background: '#080808' }}>
                                                 <code style={{ fontSize: '0.68rem', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, flex: 1 }}>
-                                                    Fixes: ASTRAEA-ISSUE ipfs://{issue.ipfs_hash.substring(0, 16)}...
+                                                    Fixes: SOULBOUND-ISSUE ipfs://{issue.ipfs_hash.substring(0, 16)}...
                                                 </code>
                                                 <button
                                                     onClick={() => copySnippet(issue.ipfs_hash, issue.id)}
@@ -309,7 +309,7 @@ export default function HackerProfile() {
                             <>
                                 <div style={gs.treeRootLabel}>
                                     <span style={{ fontWeight: 700, color: '#888', fontFamily: 'Orbitron, monospace', fontSize: '0.72rem', letterSpacing: '0.08em' }}>
-                                        ◆ ASTRAEA SBT VAULT
+                                        ◆ SOULBOUND SBT VAULT
                                     </span>
                                     <span style={{ borderTop: '1px solid #1e1e1e', flex: 1 }} />
                                     <span style={{ color: '#333' }}>{sbts.length} token{sbts.length > 1 ? 's' : ''}</span>

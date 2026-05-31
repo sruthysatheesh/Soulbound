@@ -16,8 +16,8 @@ const hardhatLocal = {
 } as const;
 
 const config = getDefaultConfig({
-    appName: 'Astraea',
-    projectId: 'astraea-hackathon', // WalletConnect projectId (placeholder for local dev)
+    appName: 'SoulBound',
+    projectId: 'SoulBound-hackathon', // WalletConnect projectId (placeholder for local dev)
     chains: [hardhatLocal],
     ssr: true,
 });

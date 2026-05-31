@@ -107,7 +107,7 @@ def analyze(repo_path: str) -> dict:
 
     # Build a single code bundle with clear separators
     MAX_CHARS_PER_FILE = 3000
-    MAX_TOTAL_CHARS = 50000
+    MAX_TOTAL_CHARS = 15000
     code_bundle = ""
     included = []
 
@@ -116,14 +116,14 @@ def analyze(repo_path: str) -> dict:
         snippet = content[:MAX_CHARS_PER_FILE]
         section = f"\n\n{'='*60}\nFILE: {fname}\n{'='*60}\n{snippet}"
         if len(code_bundle) + len(section) > MAX_TOTAL_CHARS:
-            print(f"⚠️  Skipping {fname} — total context limit reached")
+            print(f"Skipping {fname} — total context limit reached")
             break
         code_bundle += section
         included.append(fname)
-        print(f"  ✅ Loaded: {fname} ({len(snippet)} chars)")
+        print(f"Loaded: {fname} ({len(snippet)} chars)")
 
     file_list_str = "\n".join(included)
-    print(f"\n🤖 Sending {len(included)} files to LLM for analysis...\n")
+    print(f"\nSending {len(included)} files to LLM for analysis...\n")
 
     # Step 2: Single-shot analysis — all code is injected directly, no tool calls needed
     system_prompt = f"""You are TheBugHunter, an expert smart contract and code security auditor.
@@ -168,7 +168,7 @@ Respond with ONLY this JSON (no markdown fences, no extra text):
 
     # Step 3: Up to 3 retries if JSON is invalid
     for attempt in range(3):
-        print(f"🔄 LLM analysis attempt {attempt + 1}")
+        print(f"LLM analysis attempt {attempt + 1}")
         response = client.chat.completions.create(
             model=LLM_MODEL,
             messages=messages,
@@ -187,10 +187,10 @@ Respond with ONLY this JSON (no markdown fences, no extra text):
 
         try:
             result = json.loads(clean_json(raw), strict=False)
-            print(f"✅ Parsed successfully — {result.get('total_bugs_found', '?')} bugs found")
+            print(f"Parsed successfully — {result.get('total_bugs_found', '?')} bugs found")
             return result
         except Exception as e:
-            print(f"⚠️ JSON parse failed (attempt {attempt+1}): {e}")
+            print(f"JSON parse failed (attempt {attempt+1}): {e}")
             messages.append({"role": "assistant", "content": raw})
             messages.append({
                 "role": "user",

@@ -71,7 +71,7 @@ export default function OrgDashboard() {
             assigned_at: new Date().toISOString(),
         };
 
-        const key = `astraea_assignments_${github.toLowerCase()}`;
+        const key = `SOULBOUND_assignments_${github.toLowerCase()}`;
         const existing: AssignmentRecord[] = JSON.parse(localStorage.getItem(key) || '[]');
         // Prevent duplicate assignment for same IPFS hash AND same vulnerability
         if (!existing.some(e => e.ipfs_hash === cid && e.vuln_name === (vuln.vulnerability_name || 'Unknown Vulnerability'))) {
@@ -149,14 +149,14 @@ export default function OrgDashboard() {
             const hackerWallet = profiles[foundKey];
 
             // ── 2. Duplicate guard ────────────────────────────────────────────
-            const sbtKey = `astraea_sbts_${hackerWallet.toLowerCase()}`;
+            const sbtKey = `SOULBOUND_sbts_${hackerWallet.toLowerCase()}`;
             const existingSbts: any[] = JSON.parse(localStorage.getItem(sbtKey) || '[]');
             if (existingSbts.some(s => s.pr === pull_number && s.repo === `${owner}/${repo}`)) {
                 throw new Error(`SBT already issued for ${owner}/${repo} PR #${pull_number}. Duplicate minting blocked.`);
             }
 
             // ── 3. IPFS hash cross-reference ──────────────────────────────────
-            const assignKey = `astraea_assignments_${author.toLowerCase()}`;
+            const assignKey = `SOULBOUND_assignments_${author.toLowerCase()}`;
             const assignments: AssignmentRecord[] = JSON.parse(localStorage.getItem(assignKey) || '[]');
             if (assignments.length === 0) {
                 throw new Error(`@${author} has no assigned issues. The organization must assign a vulnerability before a bounty can be issued.`);
@@ -167,7 +167,7 @@ export default function OrgDashboard() {
             const ipfsRefMatch = prBody.match(/ipfs:\/\/(Qm[a-zA-Z0-9]+|baf[a-zA-Z0-9]+)/i);
             if (!ipfsRefMatch) {
                 throw new Error(
-                    `PR body does not reference an Astraea IPFS issue. The hacker must include "Fixes: ASTRAEA-ISSUE ipfs://Qm..." in the PR description.`
+                    `PR body does not reference an SOULBOUND IPFS issue. The hacker must include "Fixes: SOULBOUND-ISSUE ipfs://Qm..." in the PR description.`
                 );
             }
             const referencedCid = ipfsRefMatch[1];
@@ -213,7 +213,7 @@ export default function OrgDashboard() {
     // Persist SBT on confirmed mint + mark assignment resolved
     useEffect(() => {
         if (isConfirmed && foundWallet && patchEval && bountyUri) {
-            const sbtKey = `astraea_sbts_${foundWallet.toLowerCase()}`;
+            const sbtKey = `SOULBOUND_sbts_${foundWallet.toLowerCase()}`;
             const existing: any[] = JSON.parse(localStorage.getItem(sbtKey) || '[]');
             const repoMatch = prUrl.match(/github\.com\/([^/]+\/[^/]+)/);
             const prMatch = prUrl.match(/\/pull\/(\d+)/);
@@ -233,7 +233,7 @@ export default function OrgDashboard() {
 
             // Mark the assignment as resolved
             if (hackerGithub && matchedIssueId) {
-                const assignKey = `astraea_assignments_${hackerGithub.toLowerCase()}`;
+                const assignKey = `SOULBOUND_assignments_${hackerGithub.toLowerCase()}`;
                 const assignments: AssignmentRecord[] = JSON.parse(localStorage.getItem(assignKey) || '[]');
                 const updated = assignments.map(a =>
                     a.id === matchedIssueId ? { ...a, status: 'resolved' } : a
@@ -253,19 +253,19 @@ export default function OrgDashboard() {
     };
 
     return (
-        <div className="container" style={{ marginTop: '2rem' }}>
+        <main className="page">
             <div style={{ marginBottom: '2rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
-                <h1 className="glitch" data-text="ORGANIZATION PORTAL">ORGANIZATION PORTAL</h1>
-                <p style={{ color: 'var(--text-muted)' }}>Secure Zero-Day Payload Decryption Terminal & Bounty Manager</p>
+                <h1 className="section-title">Organization Portal</h1>
+                <p className="section-sub">Secure Zero-Day Payload Decryption Terminal & Bounty Manager</p>
             </div>
 
-            <div className="grid">
+            <div className="grid-2" style={{ gap: '2rem' }}>
                 {/* ── Left Column ────────────────────────────────────────────── */}
                 <div>
                     {/* Decrypt Card */}
-                    <div className="card card-glow" style={{ borderColor: 'var(--border)', boxShadow: '0 0 15px var(--border-glow)' }}>
+                    <div className="card card-glow">
                         <div style={{ marginBottom: '1rem' }}>
-                            <span className="code-label" style={{ color: 'var(--primary)' }}>// IPFS PAYLOAD URI</span>
+                            <span className="field-label">// IPFS PAYLOAD URI</span>
                             <input
                                 type="text"
                                 className="code-input"
@@ -277,7 +277,7 @@ export default function OrgDashboard() {
                             />
                         </div>
                         <div style={{ marginBottom: '1rem' }}>
-                            <span className="code-label" style={{ color: 'var(--primary)' }}>// ORGANIZATION PRIVATE KEY (RSA .pem)</span>
+                            <span className="field-label">// ORGANIZATION PRIVATE KEY (RSA .pem)</span>
                             <textarea
                                 className="code-input"
                                 placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----"
@@ -289,8 +289,8 @@ export default function OrgDashboard() {
                         </div>
                         {error && <div className="alert alert-warning" style={{ marginTop: '0.5rem' }}>⚠ {error}</div>}
                         <button
-                            className="btn btn-primary"
-                            style={{ width: '100%', marginTop: '1rem', background: 'var(--border)', borderColor: 'var(--primary-dim)', color: 'var(--text-primary)' }}
+                            className="btn-primary"
+                            style={{ width: '100%', marginTop: '1rem' }}
                             onClick={handleDecrypt}
                             disabled={decrypting}
                         >
@@ -299,13 +299,13 @@ export default function OrgDashboard() {
                     </div>
 
                     {/* Bounty / PR Verify Card */}
-                    <div className="card" style={{ marginTop: '2rem', borderColor: 'var(--primary)' }}>
-                        <h2 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--primary)' }}>ISSUE BOUNTY (SBT)</h2>
-                        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: '1.5' }}>
-                            Paste a merged PR URL that references an assigned Astraea issue. The system verifies the IPFS hash in the PR description before issuing the SBT.
+                    <div className="card" style={{ marginTop: '2rem' }}>
+                        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--white)' }}>Issue Bounty (SBT)</h2>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--grey-400)', marginBottom: '1rem', lineHeight: '1.5' }}>
+                            Paste a merged PR URL that references an assigned SOULBOUND issue. The system verifies the IPFS hash in the PR description before issuing the SBT.
                         </p>
                         <div style={{ marginBottom: '1rem' }}>
-                            <span className="code-label" style={{ color: 'var(--primary)' }}>// MERGED GITHUB PR URL</span>
+                            <span className="field-label">// MERGED GITHUB PR URL</span>
                             <input
                                 type="text"
                                 className="code-input"
@@ -320,8 +320,8 @@ export default function OrgDashboard() {
 
                         {!patchEval ? (
                             <button
-                                className="btn btn-primary"
-                                style={{ width: '100%', marginTop: '1rem', background: 'rgba(77, 159, 255, 0.1)', borderColor: 'var(--accent)', color: 'var(--accent)' }}
+                                className="btn-ghost"
+                                style={{ width: '100%', marginTop: '1rem', justifyContent: 'center' }}
                                 onClick={handleVerifyPr}
                                 disabled={verifyingPr || !prUrl}
                             >
@@ -404,87 +404,56 @@ export default function OrgDashboard() {
 
                                     {/* Location */}
                                     <div style={{ marginBottom: '0.75rem' }}>
-                                        <span className="code-label">// LOCATION</span>
-                                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', marginTop: '0.4rem', padding: '0.5rem', background: 'rgba(0,0,0,0.5)', borderRadius: '4px' }}>
+                                        <span className="field-label">// LOCATION</span>
+                                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', marginTop: '0.4rem', padding: '0.5rem', background: 'var(--bg-input)', borderRadius: '4px', border: '1px solid var(--border)' }}>
                                             {vuln.file_path || 'Unknown File'}{vuln.line_number ? ` : Line ${vuln.line_number}` : ''}
                                         </p>
                                     </div>
 
                                     {/* Description */}
                                     <div style={{ marginBottom: '0.75rem' }}>
-                                        <span className="code-label">// DESCRIPTION</span>
-                                        <p style={{ fontSize: '0.9rem', lineHeight: '1.6', marginTop: '0.4rem', color: '#ccc' }}>{vuln.description}</p>
+                                        <span className="field-label">// DESCRIPTION</span>
+                                        <p style={{ fontSize: '0.9rem', lineHeight: '1.6', marginTop: '0.4rem', color: 'var(--grey-300)' }}>{vuln.description}</p>
                                     </div>
 
                                     {/* Fix Suggestion */}
                                     {vuln.fix_suggestion && (
                                         <div style={{ marginBottom: '1rem' }}>
-                                            <span className="code-label" style={{ color: 'var(--primary)' }}>// SUGGESTED FIX</span>
-                                            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', marginTop: '0.4rem', color: '#ccc' }}>{vuln.fix_suggestion}</p>
+                                            <span className="field-label">// SUGGESTED FIX</span>
+                                            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', marginTop: '0.4rem', color: 'var(--grey-300)' }}>{vuln.fix_suggestion}</p>
                                         </div>
                                     )}
 
                                     {/* ── Assign to Hacker ─────────────────────────── */}
                                     <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
-                                        <span className="code-label" style={{ color: 'var(--primary)' }}>// ASSIGN TO HACKER</span>
+                                        <span className="field-label">// ASSIGN TO HACKER</span>
                                         {/* Source Repo URL */}
                                         <input
                                             type="text"
+                                            className="input-filled"
                                             placeholder="https://github.com/owner/repo (source repo URL)"
                                             value={sourceRepoUrl[index] || ''}
                                             onChange={(e) => setSourceRepoUrl(u => ({ ...u, [index]: e.target.value }))}
-                                            style={{
-                                                width: '100%',
-                                                marginTop: '0.5rem',
-                                                marginBottom: '0.4rem',
-                                                background: '#050810',
-                                                border: '1px solid var(--border)',
-                                                borderRadius: '4px',
-                                                color: 'var(--text-primary)',
-                                                padding: '0.5rem 0.75rem',
-                                                fontFamily: 'JetBrains Mono, monospace',
-                                                fontSize: '0.78rem',
-                                                outline: 'none',
-                                                boxSizing: 'border-box' as const,
-                                            }}
+                                            style={{ marginTop: '0.5rem', marginBottom: '0.5rem', fontSize: '0.8rem', padding: '0.6rem 0.8rem' }}
                                             spellCheck={false}
                                             disabled={!ipfsUri}
                                         />
                                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                                             <input
                                                 type="text"
+                                                className="input-filled"
                                                 placeholder="github-username"
                                                 value={assignTarget[index] || ''}
                                                 onChange={(e) => setAssignTarget(t => ({ ...t, [index]: e.target.value }))}
-                                                style={{
-                                                    flex: 1,
-                                                    background: '#050810',
-                                                    border: '1px solid var(--border)',
-                                                    borderRadius: '4px',
-                                                    color: 'var(--text-primary)',
-                                                    padding: '0.55rem 0.75rem',
-                                                    fontFamily: 'JetBrains Mono, monospace',
-                                                    fontSize: '0.82rem',
-                                                    outline: 'none',
-                                                }}
+                                                style={{ flex: 1, fontSize: '0.8rem', padding: '0.6rem 0.8rem' }}
                                                 spellCheck={false}
                                                 disabled={!ipfsUri}
                                             />
                                             <button
+                                                className={assignedFlags[index] ? 'btn-ghost' : 'btn-primary'}
                                                 onClick={() => handleAssign(index, vuln)}
                                                 disabled={!assignTarget[index]?.trim() || !ipfsUri || assignedFlags[index]}
-                                                style={{
-                                                    padding: '0.55rem 1rem',
-                                                    background: assignedFlags[index] ? 'rgba(77, 159, 255, 0.15)' : 'rgba(77, 159, 255, 0.08)',
-                                                    border: `1px solid ${assignedFlags[index] ? 'var(--primary)' : 'var(--accent)'}`,
-                                                    borderRadius: '4px',
-                                                    color: assignedFlags[index] ? 'var(--primary)' : 'var(--accent)',
-                                                    fontFamily: 'Orbitron, monospace',
-                                                    fontSize: '0.7rem',
-                                                    cursor: 'pointer',
-                                                    whiteSpace: 'nowrap' as const,
-                                                    transition: 'all 0.2s',
-                                                }}
+                                                style={{ padding: '0.6rem 1rem', fontSize: '0.8rem' }}
                                             >
                                                 {assignedFlags[index] ? '✓ ASSIGNED' : 'ASSIGN'}
                                             </button>
@@ -500,11 +469,11 @@ export default function OrgDashboard() {
                         </div>
                     ) : (
                         <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.5, borderStyle: 'dashed' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>AWAITING ENCRYPTED PAYLOAD</p>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', letterSpacing: '1px' }}>AWAITING ENCRYPTED PAYLOAD</p>
                         </div>
                     )}
                 </div>
             </div>
-        </div>
+        </main>
     );
 }

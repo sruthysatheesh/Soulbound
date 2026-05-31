@@ -69,8 +69,8 @@ PATCH DIFF:
     print(f"✅ AI Evaluation complete: Score {evaluation.get('score', 'N/A')}/100")
         
     sbt_payload = {
-        "name": f"Astraea SBT: Verified Patch for {repo} PR #{pull}",
-        "description": "Soulbound Token awarded for patching a critical Web3 vulnerability detected by Astraea AI Reconnaissance.",
+        "name": f"SoulBound SBT: Verified Patch for {repo} PR #{pull}",
+        "description": "Soulbound Token awarded for patching a critical Web3 vulnerability detected by SoulBound AI Reconnaissance.",
         "image": "ipfs://QmYh23zE4Ppxx1j4hQx2Jj1gA5kL4UvZB8vC8o7kXrJv2n", # Generic secure shield placeholder
         "attributes": [
             {"trait_type": "Patch Score", "value": evaluation.get("score", 0), "max_value": 100},
@@ -78,7 +78,7 @@ PATCH DIFF:
             {"trait_type": "Repository", "value": f"{owner}/{repo}"},
             {"trait_type": "PR Number", "value": pull}
         ],
-        "astraea_report": evaluation.get("detailed_report", "Valid patch merged.")
+        "SoulBound_report": evaluation.get("detailed_report", "Valid patch merged.")
     }
     
     print("📌 Pinning SBT Metadata to Public IPFS Ledger...")

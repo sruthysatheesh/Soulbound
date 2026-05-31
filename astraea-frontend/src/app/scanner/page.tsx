@@ -43,7 +43,7 @@ export default function ScannerPage() {
 
     // Load logs on mount
     useEffect(() => {
-        const saved = localStorage.getItem('astraea_scan_logs');
+        const saved = localStorage.getItem('SOULBOUND_scan_logs');
         if (saved) setScanLogs(JSON.parse(saved));
     }, []);
 
@@ -124,7 +124,7 @@ export default function ScannerPage() {
                 setScanLogs(prev => {
                     const filtered = prev.filter(l => l.repo !== targetUrl);
                     const updated = [newLog, ...filtered];
-                    localStorage.setItem('astraea_scan_logs', JSON.stringify(updated));
+                    localStorage.setItem('SOULBOUND_scan_logs', JSON.stringify(updated));
                     return updated;
                 });
                 setUnscannedRepos(prev => prev.slice(1)); // Remove from queue to trigger next
@@ -153,7 +153,7 @@ export default function ScannerPage() {
                 setScanLogs(prev => {
                     const filtered = prev.filter(l => l.repo !== targetUrl);
                     const updated = [newLog, ...filtered];
-                    localStorage.setItem('astraea_scan_logs', JSON.stringify(updated));
+                    localStorage.setItem('SOULBOUND_scan_logs', JSON.stringify(updated));
                     return updated;
                 });
                 setUnscannedRepos(prev => prev.slice(1));
@@ -194,7 +194,7 @@ export default function ScannerPage() {
                 <div className="card" style={{ padding: '1rem', background: isAutoScanActive ? 'rgba(80, 250, 123, 0.05)' : '', borderColor: isAutoScanActive ? 'var(--success)' : '' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <div>
-                            <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: isAutoScanActive ? 'var(--success)' : '#fff' }}>🤖 Autonomous Agent</div>
+                            <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: isAutoScanActive ? 'var(--success)' : '#fff' }}>Anomous Agent</div>
                             <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Auto-scan {orgName} pushes</div>
                         </div>
                         <button
@@ -254,7 +254,7 @@ export default function ScannerPage() {
                                         Analyzing...
                                     </>
                                 ) : (
-                                    <> ⚡ Run Reconnaissance</>
+                                    <> Run Reconnaissance</>
                                 )}
                             </button>
                             {scanning && <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>AI scanning in progress...</span>}
@@ -404,7 +404,7 @@ export default function ScannerPage() {
             {/* Agent Logs */}
             {isAutoScanActive && (
                 <div style={{ marginTop: '2rem' }}>
-                    <h2 className="section-title" style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>🤖 Agent Scanning Logs</h2>
+                    <h2 className="section-title" style={{ fontSize: '1.2rem', marginBottom: '1rem' }}> Agent Scanning Logs</h2>
                     <div className="card" style={{ padding: '1.5rem', background: '#050810', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', height: '300px', overflowY: 'auto' }}>
                         {unscannedRepos.length > 0 && (
                             <div style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>

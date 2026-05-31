@@ -21,7 +21,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://soulbound.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -41,14 +41,14 @@ class PREvalInput(BaseModel):
 @app.post("/scan")
 async def scan(input: RepoInput):
     # Step 1 - Clone repo
-    print("📥 Cloning repo...")
+    print("Cloning repo...")
     code_path = clone_repo(input.repo_url)
 
     # Step 2 - Scan for bugs
-    print("🔍 Scanning for vulnerabilities...")
+    print("Scanning for vulnerabilities...")
 
     # Step 3 - AI analyzes results
-    print("🤖 AI analyzing...")
+    print("AI analyzing...")
     report = analyze(code_path)
 
     # Step 4 - Normalize file paths: strip the local clone prefix
@@ -71,11 +71,11 @@ async def scan(input: RepoInput):
     report["repo_url"] = input.repo_url.rstrip("/").replace(".git", "")
 
     # Step 5 - Upload to IPFS
-    print("📤 Uploading to IPFS...")
+    print("Uploading to IPFS...")
     ipfs_uri = upload_to_ipfs(report)
     report["ipfs_uri"] = ipfs_uri
 
-    print("✅ Done!")
+    print("Done!")
     return report
 
 @app.post("/decrypt")

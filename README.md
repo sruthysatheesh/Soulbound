@@ -47,7 +47,7 @@ Advanced similarity analysis ensures that patch creators are the legitimate owne
 - **Storage**: Pinata (IPFS) for decentralized metadata storage.
 
 ### Blockchain (Solidity)
-- **Smart Contract**: `AstraeaSBT.sol` (ERC721-based Soulbound Token).
+- **Smart Contract**: `SoulBoundSBT.sol` (ERC721-based Soulbound Token).
 - **Network**: Local Hardhat Node (Chain ID: 31337).
 
 ---
@@ -55,8 +55,8 @@ Advanced similarity analysis ensures that patch creators are the legitimate owne
 ## Repository Structure
 
 ```
-├── astraea-frontend/   # Next.js Web App
-├── astraea-backend/    # FastAPI Server & AI Logic
+├── SoulBound-frontend/   # Next.js Web App
+├── SoulBound-backend/    # FastAPI Server & AI Logic
 ├── contracts/          # Solidity Smart Contracts
 ├── agents/             # Dedicated AI Agent logic & prompts
 ├── tools/              # IPFS, Cloner, and Scanner utilities
@@ -81,7 +81,7 @@ npx hardhat run scripts/deploy.js --network localhost
 
 ### 3. Backend Setup
 ```bash
-cd astraea-backend
+cd SoulBound-backend
 pip install -r requirements.txt
 # Configure your .env (LLM keys, IPFS keys)
 uvicorn main:app --reload
@@ -89,7 +89,7 @@ uvicorn main:app --reload
 
 ### 4. Frontend Setup
 ```bash
-cd astraea-frontend
+cd SoulBound-frontend
 npm install
 npm run dev
 ```

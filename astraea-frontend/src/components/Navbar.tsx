@@ -1,23 +1,38 @@
 'use client';
 
-import { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-interface NavbarProps {
-    onNavigate?: (page: string) => void;
-}
+const NAV_LINKS = [
+    { href: '/scanner', label: 'Scanner' },
+    { href: '/org-dashboard', label: 'Org Portal' },
+    { href: '/profile', label: 'Profile' },
+    { href: '/trust-graph', label: 'Trust Graph' },
+];
 
 export default function Navbar() {
+    const pathname = usePathname();
+
     return (
         <nav className="navbar">
-            <div>
-                <div className="nav-logo glitch">ASTRAEA</div>
-                <div className="nav-subtitle">Security Intelligence Protocol</div>
-            </div>
+            <Link href="/" style={{ textDecoration: 'none' }}>
+                <div className="nav-brand">
+                    <div className="nav-logo glitch">SoulBound</div>
+                    <div className="nav-subtitle">Security Intelligence Protocol</div>
+                </div>
+            </Link>
+
             <div className="nav-right">
-                <a href="/scanner" className="nav-link">Scanner</a>
-                <a href="/org-dashboard" className="nav-link" style={{ color: '#ffb86c' }}>Org Portal</a>
-                <a href="/profile" className="nav-link" style={{ color: '#8be9fd' }}>Hacker Profile</a>
+                {NAV_LINKS.map(({ href, label }) => (
+                    <Link
+                        key={href}
+                        href={href}
+                        className={`nav-link${pathname === href ? ' active' : ''}`}
+                    >
+                        {label}
+                    </Link>
+                ))}
                 <ConnectButton
                     chainStatus="none"
                     showBalance={false}

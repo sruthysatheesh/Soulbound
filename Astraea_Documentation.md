@@ -1,6 +1,6 @@
-# Astraea Protocol: Web3 & Frontend Documentation
+# SoulBound Protocol: Web3 & Frontend Documentation
 
-This document outlines the architecture, tech stack, and implementation details for the **Web3 and Frontend portion (Person A's Domain)** of the Astraea hackathon project.
+This document outlines the architecture, tech stack, and implementation details for the **Web3 and Frontend portion (Person A's Domain)** of the SoulBound hackathon project.
 
 ---
 
@@ -18,7 +18,7 @@ This document outlines the architecture, tech stack, and implementation details 
 
 ## 🏗 Architecture & Implementation
 
-### 1. Smart Contract: `AstraeaSBT.sol`
+### 1. Smart Contract: `SoulBoundSBT.sol`
 The core on-chain component is a **Soulbound Token (SBT)** deployed on the local Hardhat network (Chain ID: 31337).
 
 *   **Standard:** `ERC721URIStorage` supplemented with `Ownable`.
@@ -54,7 +54,7 @@ The Web3 App serves two primary user paths: analyzing a contract and viewing hac
 *   **Purpose:** The visual representation of a hacker's on-chain pedigree.
 *   **Implementation:**
     *   Wallet-gated: Prompts the user to connect their MetaMask.
-    *   Reads the connected wallet's address and queries the `AstraeaSBT` contract using Wagmi's `useReadContract` to check their `balanceOf`.
+    *   Reads the connected wallet's address and queries the `SoulBoundSBT` contract using Wagmi's `useReadContract` to check their `balanceOf`.
     *   *(Note: Pending full GraphQL/TheGraph implementation, this view currently verifies token balance and displays the UI framework for the parsed IPFS metadata tokens).*
 
 ### 4. UI/UX Design System (`src/app/globals.css`)

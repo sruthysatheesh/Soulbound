@@ -10,7 +10,7 @@ artifacts/
 typechain/
 typechain-types/
 
-# Next.js / React (for your astraea-frontend folder)
+# Next.js / React (for your SoulBound-frontend folder)
 .next/
 out/
 build/

@@ -434,14 +434,14 @@ def fingerprint(github_username: str, patch_repo_url: str) -> dict:
     print(f"Commit Match:   {commit_match}")
 
     # Step 7 — ML AI detection
-    print("🤖 Step 7: ML AI detection...")
+    print("Step 7: ML AI detection...")
     ai_detection = detect_ai_patterns(sub_code)
 
     print(f"AI Probability: {ai_detection['ai_probability']}")
     print(f"Evidence:       {ai_detection['evidence']}")
 
     # Step 8 — Combined score
-    print("📋 Step 8: Generating final verdict...")
+    print("Step 8: Generating final verdict...")
 
     combined_score = round(
         signal_score * 0.2 +

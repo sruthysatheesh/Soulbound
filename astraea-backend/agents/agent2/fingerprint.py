@@ -1,5 +1,5 @@
 """
-fingerprint.py — Orchestrator and FastAPI endpoint for the Astraea
+fingerprint.py — Orchestrator and FastAPI endpoint for the SoulBound
 Developer Code Fingerprinting system.
 """
 
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # FastAPI app
 # ---------------------------------------------------------------------------
-app = FastAPI(title="Astraea — Developer Code Fingerprinting")
+app = FastAPI(title="SoulBound — Developer Code Fingerprinting")
 
 
 class VerifyRequest(BaseModel):
@@ -80,7 +80,7 @@ def verify_developer(username: str, patch_repo_url: str) -> dict:
       8. Return a verification result dict.
     """
 
-    tmp_dir = tempfile.mkdtemp(prefix="astraea_")
+    tmp_dir = tempfile.mkdtemp(prefix="SoulBound_")
 
     # ------ Step 1: Fetch repos ------
     try:

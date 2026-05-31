@@ -37,25 +37,25 @@ async def scan(input: RepoInput):
     print("="*50)
 
     # Step 1 — Clone repo
-    print("📥 Step 1: Cloning repo...")
+    print("Step 1: Cloning repo...")
     code_path = clone_repo(input.repo_url)
-    print(f"✅ Cloned to: {code_path}")
+    print(f"Cloned to: {code_path}")
 
     # Step 2 — Run Semgrep scanner
-    print("🔍 Step 2: Running Semgrep scanner...")
+    print("Step 2: Running Semgrep scanner...")
     scanner_output = run_scanner(code_path)
-    print(f"📋 Scanner found: {scanner_output[:200]}")
+    print(f"Scanner found: {scanner_output[:200]}")
 
     # Step 3 — AI Agent analyzes scanner results
-    print("🤖 Step 3: AI Agent analyzing...")
+    print("Step 3: AI Agent analyzing...")
     report = analyze(code_path, scanner_output)
 
     # Step 4 — Upload to IPFS
-    print("📤 Step 4: Uploading to IPFS...")
+    print("Step 4: Uploading to IPFS...")
     ipfs_uri = upload_to_ipfs(report)
     report["ipfs_uri"] = ipfs_uri
 
-    print("✅ Scan complete!")
+    print("Scan complete!")
     print("="*50 + "\n")
 
     return report

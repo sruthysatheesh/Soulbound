@@ -5,20 +5,20 @@ const path = require("path");
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
 
-    console.log("🚀 Deploying AstraeaSBT with account:", deployer.address);
+    console.log("🚀 Deploying SoulBoundSBT with account:", deployer.address);
     const balance = await hre.ethers.provider.getBalance(deployer.address);
     console.log("💰 Account balance:", hre.ethers.formatEther(balance), "ETH");
 
-    const AstraeaSBT = await hre.ethers.getContractFactory("AstraeaSBT");
-    const contract = await AstraeaSBT.deploy();
+    const SoulBoundSBT = await hre.ethers.getContractFactory("SoulBoundSBT");
+    const contract = await SoulBoundSBT.deploy();
 
     await contract.waitForDeployment();
 
     const address = await contract.getAddress();
-    console.log("✅ AstraeaSBT deployed to:", address);
+    console.log("✅ SoulBoundSBT deployed to:", address);
 
     // Save the contract address and ABI for the frontend
-    const artifact = hre.artifacts.readArtifactSync("AstraeaSBT");
+    const artifact = hre.artifacts.readArtifactSync("SoulBoundSBT");
     const exportData = {
         address: address,
         abi: artifact.abi,
@@ -26,7 +26,7 @@ async function main() {
         network: hre.network.name,
     };
 
-    const outputDir = path.join(__dirname, "..", "astraea-frontend", "src", "lib");
+    const outputDir = path.join(__dirname, "..", "SoulBound-frontend", "src", "lib");
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -36,7 +36,7 @@ async function main() {
         JSON.stringify(exportData, null, 2)
     );
 
-    console.log("📄 Contract data saved to astraea-frontend/src/lib/contract.json");
+    console.log("📄 Contract data saved to SoulBound-frontend/src/lib/contract.json");
 
     console.log("\n--- Hardhat Test Wallets (import these into MetaMask!) ---");
     const signers = await hre.ethers.getSigners();
