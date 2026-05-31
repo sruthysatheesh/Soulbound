@@ -93,7 +93,7 @@ export default function OrgDashboard() {
         setResult(null);
         setDecrypting(true);
         try {
-            const response = await fetch('http://localhost:8000/decrypt', {
+            const response = await fetch('https://soulbound-fp9g.onrender.com/decrypt', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ipfs_uri: ipfsUri, private_key_pem: privateKey }),
@@ -182,7 +182,7 @@ export default function OrgDashboard() {
             setFoundWallet(hackerWallet);
 
             // ── 4. AI evaluation ──────────────────────────────────────────────
-            const resEval = await fetch('http://localhost:8000/evaluate-pr', {
+            const resEval = await fetch('https://soulbound-fp9g.onrender.com/evaluate-pr', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ pr_url: prUrl }),
