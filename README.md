@@ -54,8 +54,8 @@ Advanced similarity analysis ensures that patch creators are the legitimate owne
 ## Repository Structure
 
 ```
-├── SoulBound-frontend/   # Next.js Web App
-├── SoulBound-backend/    # FastAPI Server & AI Logic
+├── astraea-frontend/   # Next.js Web App
+├── astraea-backend/    # FastAPI Server & AI Logic
 ├── contracts/          # Solidity Smart Contracts
 ├── agents/             # Dedicated AI Agent logic & prompts
 ├── tools/              # IPFS, Cloner, and Scanner utilities
@@ -80,7 +80,7 @@ npx hardhat run scripts/deploy.js --network localhost
 
 ### 3. Backend Setup
 ```bash
-cd SoulBound-backend
+cd astraea-backend
 pip install -r requirements.txt
 # Configure your .env (LLM keys, IPFS keys)
 uvicorn main:app --reload
@@ -88,7 +88,7 @@ uvicorn main:app --reload
 
 ### 4. Frontend Setup
 ```bash
-cd SoulBound-frontend
+cd astraea-frontend
 npm install
 npm run dev
 ```
