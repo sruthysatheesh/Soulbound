@@ -38,7 +38,6 @@ Advanced similarity analysis ensures that patch creators are the legitimate owne
 - **Framework**: Next.js 15+ (App Router)
 - **Web3**: Wagmi + Viem + RainbowKit
 - **3D Visuals**: React Three Fiber + Three.js for immersive scanning effects.
-- **Styling**: Cyberpunk-themed custom CSS with high-contrast navy/blue accents.
 
 ### Backend (Python/FastAPI)
 - **AI Agents**: Multi-agent system powered by OpenAI/Groq (Llama 3 models).
